@@ -372,8 +372,7 @@ const colorScale = d3.scaleSequential(d3.interpolateGreens).domain([0,1]);
       .on("mousemove",function(event,d){
         tooltip.style("opacity",1)
           .style("left",(event.clientX+14)+"px").style("top",(event.clientY-28)+"px")
-          .html(`<strong>${d.track_name}</strong>${d.artists}<br>Genre: ${d.track_genre}<br>Popularity: ${d.popularity}<br>Energy: ${d.energy}`);
-        d3.select(this).attr("r",8).attr("stroke","#1DB954").attr("stroke-width","1.5");
+          .html(`<strong>${d.track_name}</strong><br>${d.artists}<br>Genre: ${d.track_genre}<br>Popularity: ${d.popularity}<br>Energy: ${d.energy}`);        d3.select(this).attr("r",8).attr("stroke","#1DB954").attr("stroke-width","1.5");
       })
       .on("mouseleave",function(){
         tooltip.style("opacity",0);
