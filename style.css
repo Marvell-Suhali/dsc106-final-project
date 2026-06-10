@@ -1,4 +1,4 @@
-/* SCROLLYTELLING STYLES */
+/* scrolly styles */
 #scrolly {
   position: relative;
   display: flex;
@@ -7,28 +7,28 @@
   margin: 0 auto;
 }
 
-/* The text column */
+/* text column */
 article {
   position: relative;
   padding: 0 1rem;
-  width: 40%; /* Text takes up 40% of screen */
+  width: 40%; 
 }
 
 /* Individual scroll steps */
 .step {
-  margin: 0 auto 80vh auto; /* Adds lots of space between steps */
+  margin: 0 auto 80vh auto; 
   background: rgba(22, 22, 22, 0.95);
   border: 1px solid #2a2a2a;
   border-left: 4px solid #1DB954;
   padding: 32px;
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.5);
-  opacity: 0.3; /* Dim by default */
+  opacity: 0.3; 
   transition: opacity 0.3s ease;
 }
 
 .step.is-active {
-  opacity: 1; /* Highlight active step */
+  opacity: 1; 
   border-color: #1DB954;
 }
 
@@ -38,13 +38,12 @@ article {
   font-size: 1.4rem;
 }
 
-/* The chart column */
+/* chart column */
 figure {
   position: sticky;
-  top: 15vh; /* Stick near the top */
-  width: 60%; /* Chart takes up 60% of screen */
+  top: 15vh;
+  width: 60%; 
   height: 70vh;
   margin: 0;
   padding-left: 2rem;
-  /* Remove default background so it blends seamlessly */
 }
