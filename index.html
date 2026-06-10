@@ -4,87 +4,168 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>What Makes a Song Go Viral? | DSC 106 Final Project</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/scrollama"></script>
+  
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Helvetica Neue',Arial,sans-serif;background:#0f0f0f;color:#e0e0e0;line-height:1.7;}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* Upgraded Typography and Spacing */
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+      background: #0f0f0f; 
+      color: #e0e0e0; 
+      line-height: 1.8; 
+    }
 
     /* HEADER */
-    header{background:linear-gradient(135deg,#1DB954 0%,#0a6e32 100%);padding:70px 40px 60px;text-align:center;}
-    header h1{font-size:2.6rem;color:#fff;font-weight:700;letter-spacing:-0.5px;}
-    header p.subtitle{margin-top:12px;font-size:1.15rem;color:rgba(255,255,255,0.88);}
-    header .team{margin-top:14px;font-size:0.9rem;color:rgba(255,255,255,0.7);}
+    header { 
+      background: radial-gradient(circle at top, #1DB954 0%, #0a3d1f 50%, #0f0f0f 100%);
+      padding: 90px 40px 70px; 
+      text-align: center;
+      border-bottom: 1px solid #222;
+    }
+    header h1 { font-size: 3rem; color: #fff; font-weight: 800; letter-spacing: -1px; }
+    header p.subtitle { margin-top: 16px; font-size: 1.25rem; color: rgba(255,255,255,0.85); font-weight: 400; }
+    header .team { margin-top: 24px; font-size: 0.9rem; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
 
     /* HOOK */
-    .hook{background:#111;border-left:4px solid #1DB954;margin:48px auto 0;max-width:820px;padding:32px 36px;border-radius:0 12px 12px 0;}
-    .hook h2{font-size:1.7rem;color:#1DB954;margin-bottom:12px;}
-    .hook p{color:#ccc;font-size:1.05rem;line-height:1.8;}
-    .hook .big-question{font-size:1.25rem;color:#fff;font-weight:600;margin-top:16px;font-style:italic;}
+    .hook { 
+      background: #161616; 
+      border-left: 4px solid #1DB954; 
+      margin: 48px auto 0; 
+      max-width: 820px; 
+      padding: 40px; 
+      border-radius: 0 16px 16px 0;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+    .hook h2 { font-size: 1.8rem; color: #1DB954; margin-bottom: 16px; font-weight: 700; }
+    .hook p { color: #ccc; font-size: 1.1rem; line-height: 1.8; }
+    .hook .big-question { font-size: 1.3rem; color: #fff; font-weight: 600; margin-top: 20px; font-style: italic; }
 
-    main{max-width:960px;margin:0 auto;padding:40px 24px 80px;}
+    main { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
 
-    .section-title{font-size:1.4rem;font-weight:700;color:#1DB954;margin-bottom:8px;margin-top:52px;border-bottom:1px solid #2a2a2a;padding-bottom:8px;}
-    .section-desc{color:#aaa;font-size:0.97rem;margin-bottom:20px;max-width:760px;}
+    .section-title { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 12px; margin-top: 64px; letter-spacing: -0.5px; }
+    .section-title span { color: #1DB954; }
+    .section-desc { color: #aaa; font-size: 1.05rem; margin-bottom: 24px; max-width: 800px; }
 
-    /* CONTROLS */
-    .controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px;background:#1a1a1a;padding:14px 18px;border-radius:10px;border:1px solid #2a2a2a;}
-    .controls label{font-size:0.9rem;color:#aaa;}
-    .controls select{background:#2a2a2a;color:#e0e0e0;border:1px solid #3a3a3a;border-radius:6px;padding:6px 12px;font-size:0.9rem;cursor:pointer;}
-    .controls select:focus{outline:2px solid #1DB954;}
-    #track-count{font-size:0.85rem;color:#1DB954;margin-left:auto;}
+    /* CONTROLS  */
+    .controls { 
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap; 
+      margin-bottom: 24px; background: #161616; padding: 16px 24px; 
+      border-radius: 12px; border: 1px solid #2a2a2a;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .controls label { font-size: 0.95rem; color: #aaa; font-weight: 500; }
+    
+    /* Custom Select Dropdown */
+    .controls select { 
+      appearance: none;
+      background: #222 url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231DB954' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 12px center;
+      background-size: 16px;
+      color: #fff; border: 1px solid #333; border-radius: 8px; 
+      padding: 10px 40px 10px 16px; font-size: 0.95rem; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .controls select:hover { border-color: #555; }
+    .controls select:focus { outline: none; border-color: #1DB954; box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2); }
+    #track-count { font-size: 0.9rem; color: #1DB954; margin-left: auto; font-weight: 600; }
 
-    /* CHART CONTAINERS */
-    .chart-box{background:#1a1a1a;border-radius:12px;border:1px solid #2a2a2a;padding:20px;}
+    /* CHART CONTAINERS (Depth added) */
+    .chart-box { 
+      background: #161616; 
+      border-radius: 16px; 
+      border: 1px solid #222; 
+      padding: 24px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
 
-    /* ANNOTATION BOX */
-    .annotation-box{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:18px 22px;margin-top:14px;display:flex;gap:24px;flex-wrap:wrap;}
-    .ann-item{flex:1;min-width:200px;}
-    .ann-item .ann-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#1DB954;margin-bottom:4px;}
-    .ann-item .ann-text{font-size:0.9rem;color:#bbb;line-height:1.55;}
+    /* ANNOTATION BOX -> INSIGHT CARDS */
+    .annotation-box { 
+      margin-top: 24px; display: flex; gap: 20px; flex-wrap: wrap; 
+    }
+    .ann-item { 
+      flex: 1; min-width: 250px; 
+      background: #161616; border: 1px solid #2a2a2a; border-radius: 12px; 
+      padding: 24px; 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .ann-item:hover {
+      transform: translateY(-4px);
+      border-color: #1DB954;
+    }
+    .ann-item .ann-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1DB954; margin-bottom: 8px; }
+    .ann-item .ann-text { font-size: 0.95rem; color: #bbb; line-height: 1.6; }
 
-    /* TOOLTIP */
-    .tooltip{position:fixed;background:#222;border:1px solid #1DB954;border-radius:8px;padding:10px 14px;font-size:0.82rem;color:#e0e0e0;pointer-events:none;opacity:0;transition:opacity 0.15s;max-width:210px;line-height:1.5;z-index:999;}
-    .tooltip strong{color:#1DB954;display:block;margin-bottom:4px;}
+    /* TOOLTIP (Glassmorphism) */
+    .tooltip { 
+      position: fixed; 
+      background: rgba(22, 22, 22, 0.85); 
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(29, 185, 84, 0.4); 
+      border-radius: 10px; padding: 14px 18px; font-size: 0.85rem; 
+      color: #e0e0e0; pointer-events: none; opacity: 0; 
+      transition: opacity 0.2s ease; max-width: 240px; line-height: 1.6; z-index: 999;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+    }
+    .tooltip strong { color: #fff; font-size: 1rem; display: block; margin-bottom: 6px; }
 
     /* TAKEAWAY */
-    .takeaway{background:linear-gradient(135deg,#0a3d1f,#0f0f0f);border:1px solid #1DB954;border-radius:14px;padding:36px 40px;margin-top:52px;text-align:center;}
-    .takeaway h2{font-size:1.5rem;color:#1DB954;margin-bottom:14px;}
-    .takeaway p{color:#ccc;font-size:1rem;max-width:680px;margin:0 auto;line-height:1.8;}
-    .takeaway .big-stat{font-size:2.4rem;font-weight:700;color:#1DB954;margin:18px 0 6px;}
-    .takeaway .big-label{font-size:0.9rem;color:#aaa;}
+    .takeaway { 
+      background: linear-gradient(135deg, #0a3d1f 0%, #111 100%); 
+      border: 1px solid #1DB954; border-radius: 16px; 
+      padding: 48px 40px; margin-top: 64px; text-align: center;
+      box-shadow: 0 16px 40px rgba(29, 185, 84, 0.15);
+    }
+    .takeaway h2 { font-size: 1.6rem; color: #1DB954; margin-bottom: 16px; font-weight: 800; }
+    .takeaway p { color: #ccc; font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.8; }
+    .takeaway .big-stat { font-size: 3rem; font-weight: 800; color: #fff; margin: 24px 0 8px; letter-spacing: -1px;}
+    .takeaway .big-label { font-size: 1rem; color: #1DB954; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
 
     /* WRITEUP */
-    .writeup-box{background:#1a1a1a;border-radius:12px;border:1px solid #2a2a2a;padding:28px 32px;margin-top:12px;}
-    .writeup-box h3{color:#1DB954;font-size:1rem;margin-bottom:10px;font-weight:600;}
-    .writeup-box p{color:#b0b0b0;font-size:0.95rem;margin-bottom:16px;}
+    .writeup-box { 
+      background: #161616; border-radius: 16px; border: 1px solid #222; 
+      padding: 32px 40px; margin-top: 24px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+    .writeup-box h3 { color: #fff; font-size: 1.1rem; margin-bottom: 12px; font-weight: 700; }
+    .writeup-box p { color: #aaa; font-size: 1rem; margin-bottom: 24px; line-height: 1.8; }
+    .writeup-box p:last-child { margin-bottom: 0; }
 
-    footer{text-align:center;color:#444;font-size:0.8rem;padding:30px;border-top:1px solid #1a1a1a;}
-    svg text{font-family:inherit;}
-    .bar-rect{cursor:pointer;transition:opacity 0.2s;}
-    .bar-rect:hover{opacity:0.8;}
+    footer { text-align: center; color: #555; font-size: 0.85rem; padding: 40px; border-top: 1px solid #222; font-weight: 500;}
+    
+    /* D3 Animations */
+    svg text { font-family: 'Inter', sans-serif; }
+    .dot { transition: r 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke-width 0.2s ease; cursor: crosshair; }
+    .bar-rect { cursor: pointer; transition: opacity 0.3s ease, fill 0.3s ease; }
+    .bar-rect:hover { fill: #1ed760 !important; }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <h1>🎵 What Makes a Song Go Viral?</h1>
   <p class="subtitle">Exploring the Anatomy of Spotify Hits through Interactive Data Visualization</p>
   <div class="team">Edmond Yang &nbsp;·&nbsp; Liuxuhong Zhao &nbsp;·&nbsp; Marvell Suhali &nbsp;·&nbsp; DSC 106, UCSD 2026</div>
 </header>
 
-<!-- HOOK -->
 <div class="hook">
   <h2>Have you ever wondered...</h2>
   <p>You hit shuffle on Spotify and one song gets 500 million streams while the one right after it has barely 200 plays. They sound similar. Same genre. Same era. <em>So what's the difference?</em></p>
   <p class="big-question">Is it the beat? The genre? The energy? Or something we can't even hear?</p>
-  <p style="margin-top:12px;color:#aaa;font-size:0.95rem;">We analyzed over 114,000 Spotify tracks to find out. Scroll down to explore the data yourself.</p>
+  <p style="margin-top:16px;color:#888;font-size:0.95rem;">We analyzed over 114,000 Spotify tracks to find out. Scroll down to explore the data yourself.</p>
 </div>
 
 <main>
 
-  <!-- VIZ 1: SCATTER -->
-  <h2 class="section-title">① Danceability vs. Popularity</h2>
+  <h2 class="section-title"><span>①</span> Danceability vs. Popularity</h2>
   <p class="section-desc">Does a more danceable song become more popular? Filter by genre and hover over any dot to explore. Color encodes energy — brighter green = higher energy.</p>
 
   <div class="controls">
@@ -112,8 +193,7 @@
     </div>
   </div>
 
-  <!-- VIZ 2: BAR CHART -->
-  <h2 class="section-title">② Which Genres Dominate Spotify?</h2>
+  <h2 class="section-title"><span>②</span> Which Genres Dominate Spotify?</h2>
   <p class="section-desc">Average popularity score by genre across all tracks. Click any bar to highlight it. The results might surprise you — it's not always the genres you'd expect.</p>
 
   <div class="chart-box">
@@ -123,11 +203,11 @@
   <div class="annotation-box">
     <div class="ann-item">
       <div class="ann-label">🏆 Top Genre</div>
-      <div class="ann-text"><strong style="color:#1DB954">Pop-film</strong> leads with an average popularity of 59.3 — movie soundtracks and licensed pop tracks get massive exposure through film and TV.</div>
+      <div class="ann-text"><strong style="color:#fff">Pop-film</strong> leads with an average popularity of 59.3 — movie soundtracks and licensed pop tracks get massive exposure through film and TV.</div>
     </div>
     <div class="ann-item">
       <div class="ann-label">😮 Surprise</div>
-      <div class="ann-text"><strong style="color:#1DB954">K-pop</strong> ranks #2 globally, reflecting its massive dedicated fanbase that streams songs repeatedly — a key driver of Spotify popularity scores.</div>
+      <div class="ann-text"><strong style="color:#fff">K-pop</strong> ranks #2 globally, reflecting its massive dedicated fanbase that streams songs repeatedly — a key driver of Spotify popularity scores.</div>
     </div>
     <div class="ann-item">
       <div class="ann-label">📖 Story</div>
@@ -135,12 +215,11 @@
     </div>
   </div>
 
-  <!-- TAKEAWAY -->
   <div class="takeaway">
     <h2>🎯 Key Takeaway</h2>
     <div class="big-stat">Popularity ≠ Formula</div>
     <div class="big-label">There is no single audio feature that predicts a viral hit</div>
-    <p style="margin-top:20px;">
+    <p style="margin-top:24px;">
       After exploring 114,000 tracks, the data reveals a surprising truth: <strong style="color:#fff">virality on Spotify is multidimensional.</strong>
       High danceability helps, high energy helps, being in the right genre helps — but none of these alone is enough.
       The most popular songs combine the right mood, genre context, and cultural moment.
@@ -149,11 +228,11 @@
     </p>
   </div>
 
-  <!-- WRITEUP -->
   <h2 class="section-title">Project Writeup</h2>
   <div class="writeup-box">
     <h3>1. What have you done so far?</h3>
     <p>We have selected our dataset — the Spotify Tracks Dataset from Kaggle, containing over 114,000 tracks with 21 audio and metadata features including popularity, danceability, energy, valence, tempo, and genre. We performed exploratory data analysis in Python using pandas and matplotlib, which revealed that most songs cluster between popularity scores of 30–50, while a significant spike exists at score 0 (songs with essentially no streams). We built five static visualizations covering popularity distribution, genre rankings, danceability scatter plots, a radar chart of audio features by genre, and a comparison of explicit vs. clean track popularity. For this initial prototype, we have implemented two interactive D3.js visualizations: a scatter plot that allows users to filter tracks by genre and hover over individual songs, and a bar chart showing average popularity by genre — establishing the core interactive structure of our final explorable explanation.</p>
+    
     <h3>2. What will be the most challenging part of your project to design and why?</h3>
     <p>The most challenging aspect will be designing the scrollytelling narrative structure that smoothly connects multiple visualizations into a coherent, story-driven experience. Unlike a simple dashboard, an explorable explanation requires each section to build naturally on the previous one, guiding the reader through a data-driven story without overwhelming them with too much information at once. We also anticipate challenges in rendering performance, since our dataset contains 114,000 rows and rendering all points in D3 simultaneously risks making the page slow or unresponsive — we will need to implement smart sampling or aggregation strategies. Finally, designing accessible and intuitive interactions that feel natural to a non-technical audience will require careful iteration and user-centered design thinking.</p>
   </div>
@@ -313,6 +392,7 @@ const BAR_DATA = [{"genre": "pop-film", "popularity": 59.3}, {"genre": "k-pop", 
     .attr("text-anchor","middle").style("fill","#1DB954").style("font-size","11px")
     .text("👑 #1");
 })();
+
 </script>
 </body>
 </html>
